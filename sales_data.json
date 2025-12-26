@@ -1,0 +1,23 @@
+[
+    {
+        "date": "26/12/2025",
+        "time": "15:14:42",
+        "model": "IPHONE 17",
+        "imei": "1456",
+        "customer": "Dũng"
+    },
+    {
+        "date": "26/12/2025",
+        "time": "15:14:42",
+        "model": "IPHONE 12",
+        "imei": "5556",
+        "customer": "Dũng"
+    },
+    {
+        "date": "26/12/2025",
+        "time": "15:14:42",
+        "model": "IPHONE 16",
+        "imei": "3756",
+        "customer": "Dũng"
+    }
+]
