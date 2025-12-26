@@ -1,1 +1,40 @@
 python-telegram-bot
+
+
+# 📘 HƯỚNG DẪN CÀI ĐẶT & SỬ DỤNG BOT TELEGRAM (FULL)
+
+Đây là tài liệu hướng dẫn chi tiết cách cài đặt môi trường, chạy Bot quản lý bán hàng và xử lý các lỗi thường gặp (Git, Mạng, Dữ liệu cũ).
+
+---
+
+## 🛠️ PHẦN 1: CÀI ĐẶT THƯ VIỆN
+
+Bot yêu cầu thư viện `python-telegram-bot`. Tùy vào hệ điều hành bạn đang dùng, hãy chạy lệnh tương ứng trong Terminal (hoặc CMD).
+
+### 1. Đối với Windows
+Mở CMD hoặc PowerShell và gõ:
+```bash
+pip install python-telegram-bot
+
+KALI 
+pip install python-telegram-bot --break-system-packages
+
+PHẦN 2: CHẠY BOT
+Bước 1: Tạo file code
+Tạo một file mới tên là sale.py.
+
+Copy toàn bộ đoạn code "SOURCE CODE CHUẨN" (ở cuối file hướng dẫn này) dán vào.
+
+Lưu file lại.
+
+Bước 2: Chạy lệnh
+Mở Terminal tại thư mục chứa file sale.py và gõ:
+
+Bash
+
+python sale.py
+(Nếu máy có nhiều bản Python, hãy thử: python3 sale.py)
+
+✅ Dấu hiệu thành công: Màn hình hiện dòng chữ:
+
+🚀 Bot Sale (Fix Lỗi + Mạng) đang chạy...
