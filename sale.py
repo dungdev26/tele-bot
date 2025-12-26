@@ -11,9 +11,11 @@ from telegram.ext import (
 )
 
 # ================= CẤU HÌNH =================
-# Ưu tiên lấy Token từ biến môi trường của Server, nếu không có thì dùng Token cứng
-# Lưu ý: Trên Render nhớ đặt biến môi trường tên là TOKEN
-TOKEN = os.environ.get("TOKEN", '8587238169:AAEeHUWJRPKsXAzT0hHEo83xgfTWw8gnZGw')
+# Lấy Token từ biến môi trường (ưu tiên) hoặc dùng Token cứng
+raw_token = os.environ.get("TOKEN", '8587238169:AAEeHUWJRPKsXAzT0hHEo83xgfTWw8gnZGw')
+# LÀM SẠCH TOKEN NGAY LẬP TỨC (Xóa dấu cách, dấu ngoặc thừa nếu có)
+TOKEN = raw_token.strip().replace("'", "").replace('"', "")
+
 DATA_FILE = 'sales_data.json'
 # ============================================
 
@@ -33,7 +35,7 @@ def save_data(data):
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
 
-# --- CÁC TÍNH NĂNG CHÍNH (GIỮ NGUYÊN CỦA BẠN) ---
+# --- CÁC TÍNH NĂNG CHÍNH ---
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
@@ -54,7 +56,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def log_sale(update: Update, context: ContextTypes.DEFAULT_TYPE):
     full_text = update.message.text
     
-    # Tách tin nhắn thành từng dòng (dựa vào phím Enter)
+    # Tách tin nhắn thành từng dòng
     lines = full_text.strip().split('\n')
     
     saved_count = 0
@@ -65,12 +67,10 @@ async def log_sale(update: Update, context: ContextTypes.DEFAULT_TYPE):
     date_str = now.strftime("%d/%m/%Y")
     time_str = now.strftime("%H:%M:%S")
 
-    # Chạy vòng lặp qua từng dòng để xử lý
     for line in lines:
         line = line.strip()
-        if not line: continue # Bỏ qua dòng trống
+        if not line: continue 
 
-        # Logic nhận diện dấu phân cách cho từng dòng
         if "-" in line: separator = "-"
         elif "," in line: separator = ","
         else:
@@ -79,15 +79,12 @@ async def log_sale(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         try:
             parts = line.split(separator)
-            
-            # Yêu cầu tối thiểu phải có: Tên máy và IMEI (2 phần)
             if len(parts) < 2:
                 failed_lines.append(line)
                 continue
 
             model = parts[0].strip().upper()
             imei = parts[1].strip()
-            # Nếu có phần thứ 3 thì là tên khách, không thì là 'Walk-in Customer'
             customer = parts[2].strip().title() if len(parts) > 2 else "Walk-in Customer"
 
             entry = {
@@ -104,13 +101,11 @@ async def log_sale(update: Update, context: ContextTypes.DEFAULT_TYPE):
         except Exception:
             failed_lines.append(line)
 
-    # Lưu dữ liệu sau khi xử lý xong hết các dòng
     if saved_count > 0:
         save_data(current_data)
         
         msg = f"✅ **SAVED {saved_count} ITEMS!**\n"
         msg += "------------------------\n"
-        # Chỉ hiển thị 5 dòng cuối cùng vừa nhập để tránh spam tin nhắn quá dài
         for item in current_data[-saved_count:]:
             msg += f"📦 {item['model']} - {item['customer']}\n"
         
@@ -121,9 +116,7 @@ async def log_sale(update: Update, context: ContextTypes.DEFAULT_TYPE):
             msg += "\n".join(failed_lines)
             
         await update.message.reply_text(msg, parse_mode='Markdown')
-    
     else:
-        # Nếu không dòng nào lưu được
         await update.message.reply_text(
             "❌ **Format Error!**\n"
             "Please check your input. Each line must look like:\n"
@@ -196,10 +189,9 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) -> N
     logging.error(f"⚠️ Bot Error: {context.error}")
 
 # =========================================================================
-# PHẦN CHÍNH: TỰ ĐỘNG CHUYỂN WEBHOOK (CHO RENDER) HOẶC POLLING (MÁY NHÀ)
+# PHẦN CHÍNH: ĐÃ SỬA LỖI ĐỊNH DẠNG WEBHOOK
 # =========================================================================
 if __name__ == '__main__':
-    # Cấu hình request timeout để tránh lỗi mạng chập chờn
     t_request = HTTPXRequest(connection_pool_size=8, read_timeout=60, write_timeout=60, connect_timeout=60)
 
     application = ApplicationBuilder().token(TOKEN).request(t_request).build()
@@ -211,24 +203,26 @@ if __name__ == '__main__':
     application.add_handler(CommandHandler('export', export_csv))
     application.add_handler(CommandHandler('clear', clear_data))
     
-    # Đăng ký xử lý tin nhắn (Loại trừ lệnh)
     application.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), log_sale))
     application.add_error_handler(error_handler)
     
-    # --- KIỂM TRA MÔI TRƯỜNG ĐỂ CHỌN CÁCH CHẠY ---
-    # Render luôn cung cấp biến môi trường RENDER_EXTERNAL_URL
-    RENDER_URL = os.environ.get('RENDER_EXTERNAL_URL') 
+    # --- KIỂM TRA MÔI TRƯỜNG ---
+    # Lấy URL và XÓA dấu gạch chéo thừa ở cuối (nếu có)
+    RENDER_URL = os.environ.get('RENDER_EXTERNAL_URL', '').strip().rstrip('/')
     
     if RENDER_URL:
         # >>> CHẠY TRÊN SERVER (RENDER) <<<
         PORT = int(os.environ.get("PORT", "8080"))
         print(f"🚀 Bot starting on Render (Webhook Mode) at {RENDER_URL} on Port {PORT}")
         
+        # Tạo URL Webhook chuẩn: https://url-cua-ban.com/TOKEN
+        webhook_link = f"{RENDER_URL}/{TOKEN}"
+        
         application.run_webhook(
             listen="0.0.0.0",
             port=PORT,
             url_path=TOKEN,
-            webhook_url=f"{RENDER_URL}/{TOKEN}"
+            webhook_url=webhook_link
         )
     else:
         # >>> CHẠY TRÊN MÁY TÍNH CÁ NHÂN <<<
