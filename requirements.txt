@@ -38,3 +38,5 @@ python sale.py
 ✅ Dấu hiệu thành công: Màn hình hiện dòng chữ:
 
 🚀 Bot Sale (Fix Lỗi + Mạng) đang chạy...
+
+8587238169:AAEeHUWJRPKsXAzT0hHEo83xgfTWw8gnZGw
