@@ -39,4 +39,3 @@ python sale.py
 
 🚀 Bot Sale (Fix Lỗi + Mạng) đang chạy...
 
-8587238169:AAEeHUWJRPKsXAzT0hHEo83xgfTWw8gnZGw
