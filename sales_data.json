@@ -1,23 +1,46 @@
 [
     {
         "date": "26/12/2025",
-        "time": "15:14:42",
-        "model": "IPHONE 17",
-        "imei": "1456",
-        "customer": "Dũng"
+        "time": "16:01:53",
+        "model": "IP15PRM 256 TN P91",
+        "imei": "53482",
+        "customer": "Hoàng Tuyên Quang"
     },
     {
         "date": "26/12/2025",
-        "time": "15:14:42",
-        "model": "IPHONE 12",
-        "imei": "5556",
-        "customer": "Dũng"
+        "time": "16:01:53",
+        "model": "IP15PRM 256 TN P90",
+        "imei": "59311",
+        "customer": "Hoàng Tuyên Quang"
+    },
+    {
+        "date": "26/12",
+        "time": "18:53",
+        "model": "15PRM 256 TN P92",
+        "imei": "07605",
+        "customer": "Hoàng Tuyên Quang",
+        "type": "SỈ"
     },
     {
         "date": "26/12/2025",
-        "time": "15:14:42",
-        "model": "IPHONE 16",
-        "imei": "3756",
-        "customer": "Dũng"
+        "time": "16:01:53",
+        "model": "IP15PRM 256 W P92",
+        "imei": "37542",
+        "customer": "Hoàng Tuyên Quang"
+    },
+    {
+        "date": "26/12/2025",
+        "time": "16:11:27",
+        "model": "IP15PRM 256 TN P91",
+        "imei": "78154",
+        "customer": "Hoàng Tuyên Quang"
+    },
+    {
+        "date": "26/12",
+        "time": "18:44",
+        "model": "IP14PRM 1TB PURE P100",
+        "imei": "8787",
+        "customer": "A Linh Núi Trúc Lẻ",
+        "type": "LẺ"
     }
 ]
